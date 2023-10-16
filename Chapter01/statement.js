@@ -1,7 +1,6 @@
 // 메인 함수: 공연료 청구서를 출력하는 함수
 function statement(invoice, plays) {
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
   // 화폐 단위 포맷하는 함수
@@ -57,11 +56,15 @@ function statement(invoice, plays) {
   }
 
   for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-
     // 청구 내역을 출력한다.
     result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
     totalAmount += amountFor(perf);
+  }
+
+  let volumeCredits = 0;
+  for (let perf of invoice.performances) {
+    // 누적 청구 내역을 저장한다.
+    volumeCredits += volumeCreditsFor(perf);
   }
 
   result += `총액: ${usd(totalAmount)}\n`;
