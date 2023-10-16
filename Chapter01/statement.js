@@ -3,6 +3,15 @@ function statement(invoice, plays) {
   let totalAmount = 0;
   let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
+  // 누적 청구 내역을 저장하는 함수
+  function totalVolumeCredits() {
+    let volumeCredits = 0;
+    for (let perf of invoice.performances) {
+      volumeCredits += volumeCreditsFor(perf);
+    }
+    return volumeCredits;
+  }
+
   // 화폐 단위 포맷하는 함수
   function usd(aNumber) {
     return new Intl.NumberFormat("en-US",
@@ -61,14 +70,10 @@ function statement(invoice, plays) {
     totalAmount += amountFor(perf);
   }
 
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    // 누적 청구 내역을 저장한다.
-    volumeCredits += volumeCreditsFor(perf);
-  }
+  let volumeCredits = totalVolumeCredits();
 
   result += `총액: ${usd(totalAmount)}\n`;
-  result += `적립 포인트: ${volumeCredits}점\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
 
   return result;
 }
