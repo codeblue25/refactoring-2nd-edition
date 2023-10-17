@@ -1,15 +1,20 @@
 // 메인 함수: 공연료 청구서를 출력하는 함수
 function statement(invoice, plays) {
-  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  return renderPlainText(invoice, plays)
   
-  for (let perf of invoice.performances) {
-    result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+  // 청구 내역을 출력하는 함수
+  function renderPlainText(invoice, plays) {
+    let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+
+    for (let perf of invoice.performances) {
+      result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+    }
+
+    result += `총액: ${usd(totalAmount())}\n`;
+    result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+
+    return result;
   }
-
-  result += `총액: ${usd(totalAmount())}\n`;
-  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
-
-  return result;
 
   // 총 청구액을 계산하는 함수
   function totalAmount() {
